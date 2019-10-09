@@ -131,8 +131,16 @@ func getValueDescriptorsByType(typ string) (vdList []contract.ValueDescriptor, e
 
 func getValueDescriptorsByDevice(device contract.Device) (vdList []contract.ValueDescriptor, err error) {
 	// Get the names of the value descriptors
-	vdNames := []string{}
-	device.AllAssociatedValueDescriptors(&vdNames)
+	//vdNames := []string{}
+	vdNames := make(map[string]string)
+	deviceProfiles, err := mdpc.DeviceProfileForName(device.ProfileName, context.Background())
+	if err != nil {
+		return nil, err
+	}
+	for _, command := range deviceProfiles.CoreCommands{
+		command.AllAssociatedValueDescriptors(&vdNames)
+		//command.AllAssociatedValueDescriptors(&vdNames)
+	}
 
 	// Get the value descriptors
 	vdList = []contract.ValueDescriptor{}

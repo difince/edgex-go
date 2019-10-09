@@ -93,16 +93,16 @@ func (d *Device) ToContract(dsTransform deviceServiceTransform, dpTransform devi
 	if err != nil {
 		return
 	}
-
-	dpModel, err := dpTransform.DBRefToDeviceProfile(d.Profile)
-	if err != nil {
-		return
-	}
-	result.Profile, err = dpModel.ToContract()
-	if err != nil {
-		return
-	}
-
+	//
+	//dpModel, err := dpTransform.DBRefToDeviceProfile(d.Profile)
+	//if err != nil {
+	//	return
+	//}
+	//result.Profile, err = dpModel.ToContract()
+	//if err != nil {
+	//	return
+	//}
+	result.ProfileName = d.ProfileName
 	c = result
 	return
 }
@@ -144,14 +144,14 @@ func (d *Device) FromContract(from contract.Device, dsTransform deviceServiceTra
 		return
 	}
 
-	var dpModel DeviceProfile
-	if _, err = dpModel.FromContract(from.Profile); err != nil {
-		return
-	}
-	d.ProfileName = dpModel.Name
-	if d.Profile, err = dpTransform.DeviceProfileToDBRef(dpModel); err != nil {
-		return
-	}
+	//var dpModel DeviceProfile
+	//if _, err = dpModel.FromContract(from.Profile); err != nil {
+	//	return
+	//}
+	d.ProfileName = from.ProfileName
+	//if d.Profile, err = dpTransform.DeviceProfileToDBRef(dpModel); err != nil {
+	//	return
+	//}
 
 	id = toContractId(d.Id, d.Uuid)
 	return

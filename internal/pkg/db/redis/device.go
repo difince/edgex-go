@@ -50,8 +50,8 @@ func marshalDevice(d contract.Device) (out []byte, err error) {
 		Labels:          d.Labels,
 		Location:        d.Location,
 		Service:         d.Service.Id,
-		Profile:         d.Profile.Id,
-		ProfileName:     d.Profile.Name,
+		//Profile:         d.Profile.Id,
+		ProfileName:     d.ProfileName,
 	}
 
 	return marshalObject(s)
@@ -78,6 +78,7 @@ func unmarshalDevice(o []byte, d interface{}) (err error) {
 		x.LastReported = s.LastReported
 		x.Labels = s.Labels
 		x.Location = s.Location
+		x.ProfileName = s.ProfileName
 
 		conn, err := getConnection()
 		if err != nil {
@@ -90,10 +91,10 @@ func unmarshalDevice(o []byte, d interface{}) (err error) {
 			return err
 		}
 
-		err = getObjectById(conn, s.Profile, unmarshalDeviceProfile, &x.Profile)
-		if err != nil {
-			return err
-		}
+		//err = getObjectById(conn, s.Profile, unmarshalDeviceProfile, &x.Profile)
+		//if err != nil {
+		//	return err
+		//}
 
 		return nil
 	default:

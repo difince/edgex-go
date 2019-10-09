@@ -29,3 +29,5 @@ require (
 )
 
 go 1.12
+
+replace github.com/edgexfoundry/go-mod-core-contracts => ../go-mod-core-contracts

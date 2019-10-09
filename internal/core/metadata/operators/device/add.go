@@ -58,13 +58,13 @@ func (op addDevice) Execute() (id string, err error) {
 	op.device.Service = service
 
 	// Lookup device profile by name, then ID. Verify it exists.
-	profile, err := op.database.GetDeviceProfileByName(op.device.Profile.Name)
+	profile, err := op.database.GetDeviceProfileByName(op.device.ProfileName)
 	if err != nil {
 		// Try by ID
-		profile, err = op.database.GetDeviceProfileById(op.device.Profile.Id)
+		//profile, err = op.database.GetDeviceProfileById(op.device.Profile.Id)
 		if err != nil {
 			if err == db.ErrNotFound {
-				err = errors.NewErrItemNotFound(fmt.Sprintf("invalid device profile: %s %s", op.device.Profile.Name, op.device.Profile.Id))
+				err = errors.NewErrItemNotFound(fmt.Sprintf("invalid device profile: %s ", op.device.ProfileName))
 			}
 			evt.Error = err
 			op.events <- evt
@@ -72,7 +72,7 @@ func (op addDevice) Execute() (id string, err error) {
 		}
 	}
 	// TODO: Will be decoupling the DeviceProfile
-	op.device.Profile = profile
+	//op.device.ProfileName = profile.Name
 
 	// Add the device
 	id, err = op.database.AddDevice(op.device, profile.CoreCommands)

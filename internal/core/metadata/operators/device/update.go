@@ -101,14 +101,14 @@ func (op updateDevice) Execute() (err error) {
 		op.device.Service = service
 	}
 
-	var profile contract.DeviceProfile
-	if (op.device.Profile.String() != contract.DeviceProfile{}.String()) {
+	//var profile contract.DeviceProfile
+	if op.device.ProfileName != "" {
 		// Check if the new profile exists
 		// Try ID first
-		profile, err = op.database.GetDeviceProfileById(op.device.Profile.Id)
+		// Then try Name
+		_, err = op.database.GetDeviceProfileByName(op.device.ProfileName)
+		//profile, err = op.database.GetDeviceProfileById(op.device.Profile.Id)
 		if err != nil {
-			// Then try Name
-			profile, err = op.database.GetDeviceProfileByName(op.device.Profile.Name)
 			if err != nil {
 				err = errors.NewErrItemNotFound("Device profile not found for updated device")
 				op.logger.Error(err.Error())
@@ -117,7 +117,7 @@ func (op updateDevice) Execute() (err error) {
 				return
 			}
 		}
-		op.device.Profile = profile
+		//op.device.Profile = profile
 	}
 
 	if err != nil {
@@ -154,9 +154,9 @@ func (op updateDevice) updateDeviceFields(original contract.Device) (updated con
 	if (op.device.Service.String() != contract.DeviceService{}.String()) {
 		updated.Service = op.device.Service
 	}
-	if (op.device.Profile.String() != contract.DeviceProfile{}.String()) {
-		updated.Profile = op.device.Profile
-	}
+	//if (op.device.Profile.String() != contract.DeviceProfile{}.String()) {
+		updated.ProfileName = op.device.ProfileName
+	//}
 	if len(op.device.Protocols) > 0 {
 		updated.Protocols = op.device.Protocols
 	}

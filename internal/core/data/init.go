@@ -49,6 +49,7 @@ var chEvents chan interface{} // A channel for "domain events" sourced from even
 var msgClient messaging.MessageClient
 var mdc metadata.DeviceClient
 var msc metadata.DeviceServiceClient
+var mdpc metadata.DeviceProfileClient
 
 type server interface {
 	IsRunning() bool
@@ -77,6 +78,16 @@ func (s ServiceInit) initializeClients(useRegistry bool, registry registry.Clien
 		endpoint.Endpoint{RegistryClient: &registry})
 
 	msc = metadata.NewDeviceServiceClient(
+		types.EndpointParams{
+			ServiceKey:  clients.CoreMetaDataServiceKey,
+			Path:        clients.ApiDeviceServiceRoute,
+			UseRegistry: useRegistry,
+			Url:         Configuration.Clients["Metadata"].Url() + clients.ApiDeviceRoute,
+			Interval:    Configuration.Service.ClientMonitor,
+		},
+		endpoint.Endpoint{RegistryClient: &registry})
+
+	mdpc = metadata.NewDeviceProfileClient(
 		types.EndpointParams{
 			ServiceKey:  clients.CoreMetaDataServiceKey,
 			Path:        clients.ApiDeviceServiceRoute,
